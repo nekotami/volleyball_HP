@@ -8,62 +8,69 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    /* ボールのスタイル設定 */
+    /* 落ちてくるバレーボールのスタイル設定 */
     .ball {
-      position: fixed; /* 常に画面上の位置に固定 */
-      width: 100px;    /* サイズを大きくしました */
-      height: 100px;   /* サイズを大きくしました */
-      background-size: cover; /* 画像を要素に合わせて表示 */
-      z-index: -1;     /* 背面に表示（他の要素の後ろ） */
-      animation: fall linear infinite; /* 下に落ちるアニメーションをループ */
+      position: fixed; /* 画面上の固定位置に表示 */
+      width: 100px;    /* ボールの幅 */
+      height: 100px;   /* ボールの高さ */
+      background-size: cover; /* 背景画像を要素に合わせて表示 */
+      z-index: -1;     /* 最背面に表示（他のコンテンツの後ろ） */
+      animation: fall linear infinite; /* fallアニメーションを無限に繰り返し適用 */
       opacity: 0.8;    /* 少し透けさせる */
     }
 
-    /* ボールが落ちてくるアニメーションの定義 */
+    /* ボールが画面上部から落ちてくるアニメーションの定義 */
     @keyframes fall {
       0% {
-        top: -100px;   /* 画面の上から出現（ボールの大きさに合わせて調整） */
-        opacity: 0;    /* 最初は見えない */
+        top: -100px;   /* アニメーション開始時：画面の上端より少し上から出現 */
+        opacity: 0;    /* 最初は透明で見えない */
       }
       10% {
-        opacity: 0.8;  /* 少し見えるようになる */
+        opacity: 0.8;  /* 出現直後に不透明になる */
       }
       100% {
-        top: 100vh;    /* 画面下まで落下 */
-        opacity: 0;    /* 最後に見えなくなる */
+        top: 100vh;    /* アニメーション終了時：画面下端まで落下 */
+        opacity: 0;    /* 落下後、透明になって見えなくなる */
       }
     }
 
-    /* モバイル対応：基本レイアウト調整 */
+    /* 全体のボディスタイルとモバイル対応の基本レイアウト調整 */
     body {
-      margin: 0; /* ページの余白なし */
-      font-family: 'Arial', sans-serif;
+      margin: 0; /* ページのデフォルト余白を削除 */
+      font-family: 'Arial', sans-serif; /* フォントの指定 */
       background: linear-gradient(#ffffff, #edbc8e); /* 明るいグラデーション背景 */
-      overflow-x: hidden; /* 横スクロールを防ぐ */
+      overflow-x: hidden; /* 横方向のスクロールバーを非表示にする */
     }
 
+    /* コンテンツの幅を制限し、中央に配置するためのコンテナスタイル */
     .container {
-      padding: 1rem; /* スマホでも余白が取れるように */
+      padding: 1rem; /* 内側の余白を設定（特にスマホ表示での見栄えのため） */
     }
     
-    /* ヘッダーのスタイル */
+    /* ヘッダーセクションのスタイル */
     .bg-primary {
-      background-image: url('header.jpeg');
-      background-size: cover;
-      background-position: center;
-      opacity: 0.7; /* 透明度を調整（0〜1の範囲で指定） */
-      /*background-blend-mode: multiply;  背景色とのブレンドモード（必要に応じて） */
-      color: white !important; /* テキストの色を白に維持 */
-      text-align: center;
-      padding: 5rem 0; /* 上下のpaddingを調整 */
+      background-image: url('header.jpeg'); /* 背景画像としてheader.jpegを使用 */
+      background-size: cover; /* 画像が要素全体を覆うように拡大縮小 */
+      background-position: center; /* 画像を中央に配置 */
+      opacity: 0.7; /* ヘッダー画像全体を70%の不透明度にする */
+      /*background-blend-mode: multiply;  背景色とのブレンドモード（必要に応じてコメント解除） */
+      color: white !important; /* テキストの色を強制的に白に設定 */
+      text-align: center; /* テキストを中央揃えにする */
+      padding: 5rem 0; /* 上下のパディングを大きくして高さを出す */
     }
     
+    /* ヘッダー内の見出しと段落のスタイル */
     .bg-primary h1,
     .bg-primary p {
-      background-color: rgba(237, 164, 95, 0.7); /* 背景色の上にさらに半透明の背景を追加してテキストを見やすくする */
+      background-color: rgba(237, 164, 95, 0.7); /* テキストの上に半透明の青い背景を追加し、見やすくする */
       padding: 0.5rem 1rem;
-      display: inline-block; /* テキスト部分だけ背景色を適用 */
+      display: inline-block; /* テキストのコンテンツ幅に合わせて背景を適用 */
       border-radius: 5px;
+    }
+
+    /* ヘッダーの段落（キャッチフレーズ）の改行を確実にする */
+    header .bg-primary p { /* ヘッダー内のp要素に限定してスタイルを適用 */
+      display: block; /* ブロック要素として表示し、常に改行させる */
     }
   </style>
 
@@ -135,32 +142,34 @@
   </footer>
 
   <script>
-    // ページの読み込みが終わったら実行
+    // ページの読み込みが完了したら実行される関数
     document.addEventListener("DOMContentLoaded", function () {
-      const NUM_BALLS = 4; // 表示するバレーボールの数を4つに調整しました
-      const ballImages = [ // 使用する画像の配列を定義
+      const NUM_BALLS = 4; // 表示するバレーボールの数を4つに設定
+      // 落ちてくるボールに使用する画像の配列
+      const ballImages = [
         'volleyball_ball_custom.png',
         'Mikasavolleyball.png'
       ];
 
+      // 指定された数のボールを生成し、配置するループ
       for (let i = 0; i < NUM_BALLS; i++) {
-        const ball = document.createElement("div"); // 新しいボールを作成
-        ball.className = "ball";
+        const ball = document.createElement("div"); // 新しいdiv要素を作成
+        ball.className = "ball"; // ballクラスを適用
 
-        // ランダムな画像を割り当てる
+        // ランダムな画像を選択し、背景として設定
         const randomImage = ballImages[Math.floor(Math.random() * ballImages.length)];
         ball.style.backgroundImage = `url('${randomImage}')`;
 
-        // ランダムな横位置に配置（%単位）
+        // ボールをランダムな横位置に配置（vw単位でビューポート幅に対する割合）
         ball.style.left = Math.random() * 100 + "vw";
 
-        // アニメーションの時間をランダムに（5〜10秒）
+        // アニメーションの再生時間をランダムに設定（5秒から10秒の間）
         ball.style.animationDuration = (5 + Math.random() * 5) + "s";
 
-        // アニメーションの開始タイミングもずらす
+        // アニメーションの開始タイミングをランダムにずらす
         ball.style.animationDelay = (Math.random() * 5) + "s";
 
-        // ボールをHTMLのbody内に追加
+        // 作成したボール要素をHTMLのbody内に追加
         document.body.appendChild(ball);
       }
     });
