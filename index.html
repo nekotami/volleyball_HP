@@ -59,18 +59,22 @@
       padding: 5rem 0; /* 上下のパディングを大きくして高さを出す */
     }
     
-    /* ヘッダー内の見出しと段落のスタイル */
-    .bg-primary h1,
-    .bg-primary p {
-      background-color: rgba(237, 164, 95, 0.7); /* テキストの上に半透明の青い背景を追加し、見やすくする */
+    /* ヘッダー内のh1要素のスタイル */
+    .bg-primary h1 {
+      background-color: rgba(237, 164, 95, 0.7); /* テキストの上に半透明の背景を追加し、見やすくする */
       padding: 0.5rem 1rem;
       display: inline-block; /* テキストのコンテンツ幅に合わせて背景を適用 */
       border-radius: 5px;
+      margin-bottom: 0.5rem; /* h1の下に少し余白を追加 */
     }
 
-    /* ヘッダーの段落（キャッチフレーズ）の改行を確実にする */
-    header .bg-primary p { /* ヘッダー内のp要素に限定してスタイルを適用 */
+    /* ヘッダー内のp要素のスタイル（改行を確実にする） */
+    .bg-primary p { /* ヘッダー内のp要素に限定してスタイルを適用 */
+      background-color: rgba(237, 164, 95, 0.7); /* テキストの上に半透明の背景を追加し、見やすくする */
+      padding: 0.5rem 1rem;
       display: block; /* ブロック要素として表示し、常に改行させる */
+      border-radius: 5px;
+      margin-top: 0; /* h1との間の余白を調整 */
     }
   </style>
 
