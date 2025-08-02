@@ -45,6 +45,26 @@
     .container {
       padding: 1rem; /* スマホでも余白が取れるように */
     }
+    
+    /* ヘッダーのスタイル */
+    .bg-primary {
+      background-image: url('header.jpeg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.3; /* 透明度を調整（0〜1の範囲で指定） */
+      background-blend-mode: multiply; /* 背景色とのブレンドモード（必要に応じて） */
+      color: white !important; /* テキストの色を白に維持 */
+      text-align: center;
+      padding: 5rem 0; /* 上下のpaddingを調整 */
+    }
+    
+    .bg-primary h1,
+    .bg-primary p {
+      background-color: rgba(0, 123, 255, 0.7); /* 背景色の上にさらに半透明の背景を追加してテキストを見やすくする */
+      padding: 0.5rem 1rem;
+      display: inline-block; /* テキスト部分だけ背景色を適用 */
+      border-radius: 5px;
+    }
   </style>
 
 </head>
@@ -87,8 +107,7 @@
       </iframe>
     </section>
 
-    <section class="mb-5">
-      <h2>お問い合わせ</h2>
+    <section class="container my-5"> <h2>お問い合わせ</h2>
       <form action="https://formspree.io/f/xjkoekaa" method="POST">
         <input type="text" name="_gotcha" style="display:none">
 
