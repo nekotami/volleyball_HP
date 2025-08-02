@@ -8,15 +8,15 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <style>
-    /* 落ちてくるバレーボールのスタイル設定 */
+    /* ===== 落ちてくるバレーボールのアニメーション関連スタイル ===== */
     .ball {
-      position: fixed; /* 画面上の固定位置に表示 */
+      position: fixed; /* 画面上の固定位置に表示（スクロールしても動かない） */
       width: 100px;    /* ボールの幅 */
       height: 100px;   /* ボールの高さ */
-      background-size: cover; /* 背景画像を要素に合わせて表示 */
-      z-index: -1;     /* 最背面に表示（他のコンテンツの後ろ） */
+      background-size: cover; /* 背景画像を要素に合わせて表示（画像がはみ出さないように） */
+      z-index: -1;     /* 最背面に表示（他のコンテンツの後ろに隠れる） */
       animation: fall linear infinite; /* fallアニメーションを無限に繰り返し適用 */
-      opacity: 0.8;    /* 少し透けさせる */
+      opacity: 0.7;    /* 少し透けさせる（70%の不透明度） */
     }
 
     /* ボールが画面上部から落ちてくるアニメーションの定義 */
@@ -34,20 +34,20 @@
       }
     }
 
-    /* 全体のボディスタイルとモバイル対応の基本レイアウト調整 */
+    /* ===== 全体の基本スタイルとレイアウト調整 ===== */
     body {
       margin: 0; /* ページのデフォルト余白を削除 */
       font-family: 'Arial', sans-serif; /* フォントの指定 */
       background: linear-gradient(#ffffff, #edbc8e); /* 明るいグラデーション背景 */
-      overflow-x: hidden; /* 横方向のスクロールバーを非表示にする */
+      overflow-x: hidden; /* 横方向のスクロールバーを非表示にする（ボールが画面外に出てもスクロールバーが出ないように） */
     }
 
-    /* コンテンツの幅を制限し、中央に配置するためのコンテナスタイル */
+    /* コンテンツの幅を制限し、中央に配置するためのコンテナスタイル（Bootstrapのcontainerクラス） */
     .container {
       padding: 1rem; /* 内側の余白を設定（特にスマホ表示での見栄えのため） */
     }
     
-    /* ヘッダーセクションのスタイル */
+    /* ===== ヘッダーセクションのスタイル ===== */
     .bg-primary {
       background-image: url('header.jpeg'); /* 背景画像としてheader.jpegを使用 */
       background-size: cover; /* 画像が要素全体を覆うように拡大縮小 */
@@ -58,13 +58,13 @@
       padding: 5rem 0; /* 上下のパディングを大きくして高さを出す */
     }
     
-    /* ヘッダー内のh1要素のスタイル */
+    /* ヘッダー内のh1要素（メインタイトル）のスタイル */
     .bg-primary h1 {
       display: block; /* ブロック要素として表示し、必ず改行させる */
       margin-bottom: 0.5rem; /* h1の下に少し余白を追加 */
     }
 
-    /* ヘッダー内のp要素のスタイル（改行を確実にする） */
+    /* ヘッダー内のp要素（サブタイトル）のスタイル */
     .bg-primary p {
       display: block; /* ブロック要素として表示し、必ず改行させる */
       margin-top: 0; /* h1との間の余白を調整 */
@@ -72,7 +72,8 @@
       line-height: 1; /* 行の高さを調整し、spanの垂直方向の余白を制御 */
     }
 
-    /* ヘッダー内のテキストの背景とパディングを適用するspan要素のスタイル */
+    /* ヘッダー内のテキストに背景とパディングを適用するspan要素のスタイル */
+    /* h1とpの内側にあるspanに適用することで、テキストのコンテンツ幅に合わせた背景となる */
     .bg-primary h1 span,
     .bg-primary p span {
       background-color: rgba(237, 164, 95, 0.7); /* テキストの上に半透明の背景を追加し、見やすくする */
@@ -127,7 +128,19 @@
       </iframe>
     </section>
 
-    <section class="container my-5"> <h2>お問い合わせ</h2>
+    <section class="container my-5">
+      <h2>ギャラリー</h2>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <img src="Mikasavolleyball.png" class="img-fluid rounded" alt="バレーボールの画像1">
+        </div>
+        <div class="col-md-6 mb-4">
+          <img src="volleyball_ball_custom.png" class="img-fluid rounded" alt="バレーボールの画像2">
+        </div>
+        </div>
+    </section>
+    <section class="container my-5">
+      <h2>お問い合わせ</h2>
       <form action="https://formspree.io/f/xjkoekaa" method="POST">
         <input type="text" name="_gotcha" style="display:none">
 
@@ -158,15 +171,14 @@
   <script>
     // ページの読み込みが完了したら実行される関数
     document.addEventListener("DOMContentLoaded", function () {
-      const NUM_BALLS = 4; // 表示するバレーボールの数を4つに設定
       // 落ちてくるボールに使用する画像の配列
       const ballImages = [
         'volleyball_ball_custom.png',
         'Mikasavolleyball.png'
       ];
 
-      // 指定された数のボールを生成し、配置するループ
-      for (let i = 0; i < NUM_BALLS; i++) {
+      // 新しい落ちるボールを生成する関数
+      function createFallingBall() {
         const ball = document.createElement("div"); // 新しいdiv要素を作成
         ball.className = "ball"; // ballクラスを適用
 
@@ -179,13 +191,23 @@
 
         // アニメーションの再生時間をランダムに設定（5秒から10秒の間）
         ball.style.animationDuration = (5 + Math.random() * 5) + "s";
+        
+        // アニメーションの開始遅延は0（すぐに開始）
+        ball.style.animationDelay = "0s"; 
 
-        // アニメーションの開始タイミングをランダムにずらす
-        ball.style.animationDelay = (Math.random() * 5) + "s";
+        // アニメーションが終了したときにボール要素をDOMから削除
+        // これにより、見えなくなったボールがHTML内に残り続けず、パフォーマンスが保たれます
+        ball.addEventListener('animationend', () => {
+          ball.remove();
+        });
 
         // 作成したボール要素をHTMLのbody内に追加
         document.body.appendChild(ball);
       }
+
+      // 2秒ごとに新しいボールを生成する
+      // この間隔を調整することで、ボールの出現頻度を変えられます (例: 1000で1秒ごと)
+      setInterval(createFallingBall, 2000); // 2000ms = 2秒
     });
   </script>
 
