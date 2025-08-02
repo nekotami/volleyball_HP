@@ -16,7 +16,7 @@
       background-size: cover; /* 背景画像を要素に合わせて表示（画像がはみ出さないように） */
       z-index: -1;     /* 最背面に表示（他のコンテンツの後ろに隠れる） */
       animation: fall linear infinite; /* fallアニメーションを無限に繰り返し適用 */
-      opacity: 0.7;    /* 少し透けさせる（70%の不透明度） */
+      opacity: 0.8;    /* 少し透けさせる（80%の不透明度） */
     }
 
     /* ボールが画面上部から落ちてくるアニメーションの定義 */
@@ -177,8 +177,16 @@
         'Mikasavolleyball.png'
       ];
 
+      const MAX_BALLS = 7; // ⭐ 新しく追加：表示されるボールの最大数
+      let activeBalls = 0; // ⭐ 新しく追加：現在表示されているボールの数
+
       // 新しい落ちるボールを生成する関数
       function createFallingBall() {
+        // ⭐ 最大数に達していたら、新しいボールは作らずに処理を終了
+        if (activeBalls >= MAX_BALLS) {
+          return; 
+        }
+
         const ball = document.createElement("div"); // 新しいdiv要素を作成
         ball.className = "ball"; // ballクラスを適用
 
@@ -195,17 +203,18 @@
         // アニメーションの開始遅延は0（すぐに開始）
         ball.style.animationDelay = "0s"; 
 
-        // アニメーションが終了したときにボール要素をDOMから削除
-        // これにより、見えなくなったボールがHTML内に残り続けず、パフォーマンスが保たれます
+        // アニメーションが終了したときにボール要素をDOMから削除し、カウントを減らす
         ball.addEventListener('animationend', () => {
           ball.remove();
+          activeBalls--; // ⭐ ボールが削除されたらカウントを減らす
         });
 
         // 作成したボール要素をHTMLのbody内に追加
         document.body.appendChild(ball);
+        activeBalls++; // ⭐ 新しいボールが作成されたらカウントを増やす
       }
 
-      // 2秒ごとに新しいボールを生成する
+      // 2秒ごとに新しいボールを生成しようと試みる
       // この間隔を調整することで、ボールの出現頻度を変えられます (例: 1000で1秒ごと)
       setInterval(createFallingBall, 2000); // 2000ms = 2秒
     });
